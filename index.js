@@ -6,10 +6,10 @@ const client = new Client(options)
 const commands = {}
 client.on("ready",async () => {
     await client.guilds.cache.forEach(i=>client.guilds.cache.get(i.id).commands.set([]))
-    const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'))
+    const commandFiles = ["toGIF.js"]
     const data = []
     for (const file of commandFiles) {
-        const command = require(`./commands/${file}`);
+        const command = require(`./${file}`);
         commands[command.data.name] = command
     }
     for (const commandName in commands) data.push(commands[commandName].data)
