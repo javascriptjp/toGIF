@@ -35,6 +35,8 @@ module.exports = {
             const path = `${__dirname}/temp`
             await sharp(buffer).gif().toFile(`temp/${name}`)
             exec(`rembg i ${path}/${name} ${path}/Output_${name}`, async (err,std,strerr) => {
+                console.log(std)
+                console.log(err)
                 await interaction.editReply({ content: "Removing background...", ephemeral: false })
                 setTimeout(async ()=>{
                     const buffer = Buffer.from(fs.readFileSync(`${path}/Output_${name}`))
