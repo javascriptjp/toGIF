@@ -36,9 +36,11 @@ module.exports = {
             exec(`rembg i ${path}/${name} ${path}/Output_${name}`, async (err,std,strerr) => {
                 const buffer = Buffer.from(fs.readFileSync(`${path}/Output_${name}`))
                 const attachment = await new AttachmentBuilder(buffer, { name: 'convert.gif' })
-                await interaction.editReply({files: [attachment]})
-                await fs.unlinkSync(`${path}/${name}`)
-                await fs.unlinkSync(`${path}/Output_${name}`)
+                interaction.editReply({files: [attachment]})
+                setTimeout(()=>{
+                    fs.unlinkSync(`${path}/${name}`)
+                    fs.unlinkSync(`${path}/Output_${name}`)
+                }, 1000 * 30)
             })
         }else{
             const response = await axios.get(interaction.options.getAttachment('image').attachment,{responseType: "arraybuffer"})
