@@ -28,21 +28,26 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply()
         if(interaction.options.getBoolean('rembg')){
+            await interaction.editReply("Uploading....")
             const response = await axios.get(interaction.options.getAttachment('image').attachment,{responseType: "arraybuffer"})
             const buffer = Buffer.from(response.data, "base64")
             const name = `${getRand(16)}.gif`
             const path = `${__dirname}/temp`
             await sharp(buffer).gif().toFile(`temp/${name}`)
             exec(`rembg i ${path}/${name} ${path}/Output_${name}`, async (err,std,strerr) => {
-                const buffer = Buffer.from(fs.readFileSync(`${path}/Output_${name}`))
-                const attachment = await new AttachmentBuilder(buffer, { name: 'convert.gif' })
-                interaction.editReply({files: [attachment]})
-                setTimeout(()=>{
-                    fs.unlinkSync(`${path}/${name}`)
-                    fs.unlinkSync(`${path}/Output_${name}`)
-                }, 1000 * 30)
+                await interaction.editReply("Removing background...")
+                setTimeout(async ()=>{
+                    const buffer = Buffer.from(fs.readFileSync(`${path}/Output_${name}`))
+                    const attachment = await new AttachmentBuilder(buffer, { name: 'convert.gif' })
+                    interaction.editReply({files: [attachment]})
+                    setTimeout(()=>{
+                        fs.unlinkSync(`${path}/${name}`)
+                        fs.unlinkSync(`${path}/Output_${name}`)
+                    }, 1000 * 30)
+                }, 1000 * 5)
             })
         }else{
+            await interaction.editReply("Uploading....")
             const response = await axios.get(interaction.options.getAttachment('image').attachment,{responseType: "arraybuffer"})
             const buffer = Buffer.from(response.data, "base64")
             const pic = await sharp(buffer).gif().toBuffer()
