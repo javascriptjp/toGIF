@@ -10,7 +10,7 @@ const getRand = N => Array.from(crypto.randomFillSync(new Uint8Array(N))).map((n
 module.exports = {
     data: (() => {
         const data = new SlashCommandBuilder()
-        data.setName('test')
+        data.setName('gif')
         data.setDescription('convert image to gif')
         data.addAttachmentOption(option=>{
             option.setName('image')
