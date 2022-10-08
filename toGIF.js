@@ -34,10 +34,10 @@ module.exports = {
             const path = `${__dirname}/temp`
             await sharp(buffer).gif().toFile(`temp/${name}`)
             exec(`rembg i ${path}/${name} ${path}/Output_${name}`, async (err,std,strerr) => {
-                const attachment = new AttachmentBuilder(`${path}/Output_${name}`, { name: 'convert.gif' })
+                const attachment = await new AttachmentBuilder(`${path}/Output_${name}`, { name: 'convert.gif' })
                 await interaction.editReply({files: [attachment]})
-                fs.unlinkSync(`${path}/${name}`)
-                fs.unlinkSync(`${path}/Output_${name}`)
+                await fs.unlinkSync(`${path}/${name}`)
+                await fs.unlinkSync(`${path}/Output_${name}`)
             })
         }else{
             const response = await axios.get(interaction.options.getAttachment('image').attachment,{responseType: "arraybuffer"})
