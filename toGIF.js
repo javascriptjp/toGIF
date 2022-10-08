@@ -10,7 +10,7 @@ const getRand = N => Array.from(crypto.randomFillSync(new Uint8Array(N))).map((n
 module.exports = {
     data: (() => {
         const data = new SlashCommandBuilder()
-        data.setName('gif')
+        data.setName('test')
         data.setDescription('convert image to gif')
         data.addAttachmentOption(option=>{
             option.setName('image')
@@ -34,7 +34,8 @@ module.exports = {
             const path = `${__dirname}/temp`
             await sharp(buffer).gif().toFile(`temp/${name}`)
             exec(`rembg i ${path}/${name} ${path}/Output_${name}`, async (err,std,strerr) => {
-                const attachment = await new AttachmentBuilder(`${path}/Output_${name}`, { name: 'convert.gif' })
+                const buffer = Buffer.from(fs.readFileSync(`${path}/Output_${name}`))
+                const attachment = await new AttachmentBuilder(buffer, { name: 'convert.gif' })
                 await interaction.editReply({files: [attachment]})
                 await fs.unlinkSync(`${path}/${name}`)
                 await fs.unlinkSync(`${path}/Output_${name}`)
